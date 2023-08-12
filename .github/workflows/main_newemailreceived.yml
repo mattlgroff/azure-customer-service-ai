@@ -41,4 +41,4 @@ jobs:
           app-name: 'NewEmailReceived'
           slot-name: 'Production'
           package: ${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_8156A12B1EED4E1282186D7969147EFB }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_4D46548A05004FCC9C1D68693E0A776B }}
