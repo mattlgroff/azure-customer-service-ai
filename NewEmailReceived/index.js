@@ -3,11 +3,6 @@ const sgMail = require('@sendgrid/mail');
 module.exports = async function (context, req) {
     context.log('JavaScript HTTP trigger function processed a request.');
 
-    const name = req.query.name || (req.body && req.body.name);
-    const responseMessage = name
-        ? 'Hello, ' + name + '. This HTTP triggered function executed successfully.'
-        : 'This HTTP triggered function executed successfully. Pass a name in the query string or in the request body for a personalized response.';
-
     try {
         console.log('Sending email...', process.env.SENDGRID_API_KEY)
         sgMail.setApiKey(process.env.SENDGRID_API_KEY);
@@ -16,8 +11,8 @@ module.exports = async function (context, req) {
             to: 'mattlgroff@gmail.com',
             from: 'noreply@groff.dev', // Use the email address or domain you verified above
             subject: 'We got your message!',
-            text: 'and easy to do anywhere, even with Node.js',
-            html: '<strong>and easy to do anywhere, even with Node.js</strong>',
+            text: JSON.stringify(req.body),
+            html: `<strong>${JSON.stringify(req.body)}</strong>`,
         };
 
         await sgMail.send(msg);
