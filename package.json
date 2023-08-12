@@ -6,6 +6,10 @@
     "start": "func start",
     "test": "echo \"No tests yet...\""
   },
-  "dependencies": {},
-  "devDependencies": {}
+  "devDependencies": {
+    "prettier": "^3.0.1"
+  },
+  "engines": {
+    "node": "18.15.0"
+  }
 }
