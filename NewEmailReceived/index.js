@@ -14,8 +14,8 @@ module.exports = async function (context, req) {
 
         const msg = {
             to: 'mattlgroff@gmail.com',
-            from: 'matt@umbrage.com', // Use the email address or domain you verified above
-            subject: 'We got your message! ' + JSON.stringify(new Date()),
+            from: 'noreply@groff.dev', // Use the email address or domain you verified above
+            subject: 'We got your message!',
             text: 'and easy to do anywhere, even with Node.js',
             html: '<strong>and easy to do anywhere, even with Node.js</strong>',
         };
