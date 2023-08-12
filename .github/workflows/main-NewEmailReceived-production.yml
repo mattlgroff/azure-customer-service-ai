@@ -31,11 +31,6 @@ jobs:
           npm run test --if-present
           popd
 
-      - name: 'Login via Azure CLI'
-        uses: azure/login@v1
-        with:
-          creds: ${{ secrets.AZURE_CREDENTIALS }}
-
       - name: 'Run Azure Functions Action'
         uses: Azure/functions-action@v1
         id: fa
@@ -43,4 +38,4 @@ jobs:
           app-name: 'NewEmailReceived'
           slot-name: 'production'
           package: ${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}
-          publish-profile: ${{ secrets.AzureAppService_PublishProfile_1234 }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_F44B81D313584363A75BBB2D83DF27F1 }}
