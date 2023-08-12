@@ -11,5 +11,8 @@
   },
   "engines": {
     "node": "18.15.0"
+  },
+  "dependencies": {
+    "@sendgrid/mail": "^7.7.0"
   }
 }
