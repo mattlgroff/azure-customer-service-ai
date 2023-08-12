@@ -1,3 +1,5 @@
 {
-    "name": "Azure"
+    "from": "customer@gmail.com",
+    "subject": "HELP ME",
+    "body": "How do I request a receipt from an in-store purchase? I don'\''t know what to do!"
 }
