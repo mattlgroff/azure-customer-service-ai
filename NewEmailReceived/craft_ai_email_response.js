@@ -1,4 +1,4 @@
-const { Configuration, OpenAIApi } = require('openai');
+const { Configuration, OpenAIApi, ChatCompletionResponseMessageRoleEnum } = require('openai-edge');
 const { sendEmail } = require('./send_email');
 const { getEmailHistory } = require('./get_email_history');
 const { getRelatedFAQs } = require('./get_related_faqs');
@@ -8,8 +8,18 @@ module.exports.craftAIEmailResponse = async function (emailFromRequest) {
 
     try {
         const configuration = new Configuration({
-            apiKey: process.env.OPENAI_API_KEY,
+            apiKey: process.env.AZURE_OPENAI_KEY, // Key 1 or Key 2 from Azure OpenAI Resource
+            basePath: `${process.env.AZURE_OPENAI_ENDPOINT}/openai/deployments/${process.env.AZURE_OPENAI_DEPLOYMENT_NAME}`, // Endpoint from Azure OpenAI Resource + /openai/deployments/ + Deployment Name from Azure OpenAI
+            defaultQueryParams: new URLSearchParams({
+              "api-version": process.env.AZURE_OPENAI_API_VERSION ? process.env.AZURE_OPENAI_API_VERSION : '2023-08-01-preview', // Find version numbers here: https://github.com/Azure/azure-rest-api-specs/tree/main/specification/cognitiveservices/data-plane/AzureOpenAI/inference
+            }),
+            baseOptions: {
+                headers: {
+                    'api-key': process.env.AZURE_OPENAI_KEY, // Key 1 or Key 2 from Azure OpenAI Resource (Again! Same one from apiKey above)
+                },
+            },
         });
+
         const openai = new OpenAIApi(configuration);
 
         const emailHistoryContext = await getEmailHistory(emailFromRequest.from);
@@ -40,12 +50,13 @@ module.exports.craftAIEmailResponse = async function (emailFromRequest) {
         };
 
         const response = await openai.createChatCompletion({
-            model: process.env.OPENAI_MODEL,
+            model: process.env.AZURE_OPENAI_MODEL,
             messages,
             functions: [
                 {
                     name: 'sendEmail',
-                    description: 'Send an email with sendgrid. Text content newlines should be represented as \\n within the string for JSON parsing.',
+                    description:
+                        'Send an email with sendgrid. Text content newlines should be represented as \\n within the string for JSON parsing.',
                     parameters: {
                         type: 'object',
                         properties: {
@@ -59,22 +70,25 @@ module.exports.craftAIEmailResponse = async function (emailFromRequest) {
                             },
                             text: {
                                 type: 'string',
-                                description: 'Raw text of the email. Newlines should be represented as \\n within the string for JSON parsing.',
-                              },
+                                description:
+                                    'Raw text of the email. Newlines should be represented as \\n within the string for JSON parsing.',
+                            },
                         },
                         required: ['to', 'subject', 'text'],
                     },
                 },
             ],
-            temperature: process.env.MODEL_TEMPERATURE,
+            temperature: process.env.AZURE_OPENAI_MODEL_TEMPERATURE ? parseFloat(process.env.AZURE_OPENAI_MODEL_TEMPERATURE) : 0,
         });
 
-        if (!response.data.choices[0].message?.function_call?.name || !response.data.choices[0].message?.function_call?.arguments) {
+        const data = await response.json();
+
+        if (!data?.choices[0].message?.function_call?.name || !data.choices[0].message?.function_call?.arguments) {
             throw new Error('No function call found in response');
         }
 
-        const fnName = response.data.choices[0].message.function_call.name;
-        const args = response.data.choices[0].message.function_call.arguments;
+        const fnName = data.choices[0].message.function_call.name;
+        const args = data.choices[0].message.function_call.arguments;
 
         console.log('function name', fnName);
         console.log('function args', args);

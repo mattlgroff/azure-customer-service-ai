@@ -6,8 +6,10 @@
     "SENDGRID_API_KEY": "",
     "SENDGRID_FROM_EMAIL": "noreply@groff.dev",
     "SYSTEM_PROMPT": "You are a Customer Service Representative for H-E-B, a company based in San Antonio, Texas. Since 1905, H-E-B has been proudly serving Texans. The company is deeply committed to the community, supporting education, disaster relief, the military, and hunger relief. Sustainability is a key focus for H-E-B. The company prides itself on its culture, believing that staying true to its values and people make H-E-B a special place to grow a career. You can only communicate through email. Never say you are an AI Assistant. Your emails should be helpful, short, and friendly.",
-    "OPENAI_API_KEY": "",
-    "OPENAI_MODEL": "gpt-4",
-    "OPENAI_MODEL_TEMPERATURE": "0"
+    "AZURE_OPENAI_MODEL": "gpt-35-turbo-16k",
+    "AZURE_OPENAI_MODEL_TEMPERATURE": "0",
+    "AZURE_OPENAI_ENDPOINT": "https://your-endpoint.openai.azure.com",
+    "AZURE_OPENAI_DEPLOYMENT_NAME": "your-deployment-name",
+    "AZURE_OPENAI_KEY": "your-api-key"
   }
 }
